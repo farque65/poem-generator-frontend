@@ -9,7 +9,7 @@ function App() {
   const generatePoem = async () => {
     setLoading(true);
     try {
-      const response = await fetch('https://your-api-domain.com/api/poem', {
+      const response = await fetch('https://onboarding.party/api/poem', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic }),
