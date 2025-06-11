@@ -1,51 +1,71 @@
-// src/App.tsx
 import { useState } from 'react';
 
 function App() {
   const [topic, setTopic] = useState('');
   const [poem, setPoem] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const generatePoem = async () => {
     setLoading(true);
+    setError('');
+    setPoem('');
+
     try {
-      const response = await fetch('https://onboarding.party/api/poem', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/poem`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic }),
       });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error || 'Failed to fetch poem');
+      }
+
       const data = await response.json();
       setPoem(data.poem);
-    } catch (error) {
-      console.error('Error generating poem:', error);
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <h1 className="text-3xl font-bold mb-4">Poem Generator</h1>
-      <input
-        type="text"
-        value={topic}
-        onChange={(e) => setTopic(e.target.value)}
-        placeholder="Enter a topic"
-        className="p-2 border border-gray-300 rounded mb-4 w-full max-w-md"
-      />
-      <button
-        onClick={generatePoem}
-        disabled={loading}
-        className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
-      >
-        {loading ? 'Generating...' : 'Generate Poem'}
-      </button>
-      {poem && (
-        <div className="mt-6 bg-white p-4 rounded shadow max-w-md w-full">
-          <h2 className="text-xl font-semibold mb-2">Your Poem:</h2>
-          <p>{poem}</p>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl p-8">
+        <h1 className="text-4xl font-bold text-center text-indigo-700 mb-8">✨ Poem Generator</h1>
+
+        {/* Input + Button Section */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+          <input
+            type="text"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            placeholder="Enter a topic..."
+            className="w-full sm:w-2/3 border border-gray-300 rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+          <button
+            onClick={generatePoem}
+            disabled={loading || !topic.trim()}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold disabled:opacity-50 transition w-full sm:w-auto"
+          >
+            {loading ? 'Generating...' : 'Generate'}
+          </button>
         </div>
-      )}
+
+        {/* Error Display */}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
+        {/* Poem Output Section */}
+        {poem && (
+          <div className="bg-gray-50 border border-gray-200 p-6 rounded-lg max-h-[60vh] overflow-auto">
+            <h2 className="text-xl font-semibold mb-2 text-indigo-600">📝 Your Poem</h2>
+            <pre className="whitespace-pre-wrap text-lg font-serif text-gray-800">{poem}</pre>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
