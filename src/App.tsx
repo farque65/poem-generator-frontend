@@ -6,6 +6,7 @@ function formatPoem(poem: string) {
 
   formattedPoem = formattedPoem.replace(/{/g, '');
   formattedPoem = formattedPoem.replace(/}/g, '');
+  formattedPoem = formattedPoem.replace(/\\/g, '');
   // Replace escaped quotes (\") with actual quotes
   formattedPoem = formattedPoem.replace(/"poem": "/g, '');
   // Replace double escaped newlines (\\n) with actual newlines
