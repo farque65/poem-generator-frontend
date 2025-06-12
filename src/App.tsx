@@ -33,7 +33,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen w-full-screen bg-gradient-to-br from-indigo-100 to-purple-200 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl p-8">
         <h1 className="text-4xl font-bold text-center text-indigo-700 mb-8">✨ Poem Generator</h1>
 
@@ -43,7 +43,7 @@ function App() {
             type="text"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            placeholder="Enter a topic..."
+            placeholder="Enter a topic......"
             className="w-full sm:w-2/3 border border-gray-300 rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
           <button
