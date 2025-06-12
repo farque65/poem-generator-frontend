@@ -13,7 +13,7 @@ function formatPoem(poem: string) {
   formattedPoem = formattedPoem.replace(/."/g, '');
 
   // Split poem into lines and wrap each in <span>
-  return formattedPoem.split('\\n').map((line, idx) => (
+  return formattedPoem.split('\\n').map((line: string, idx: number) => (
     <span key={idx}>
       {line}
       <br />
